@@ -1,0 +1,26 @@
+{% extends "dashboard_base.html" %}
+{% block dash_content %}
+<div class="grid-2">
+  <div class="card">
+    <h1>{{ app.job.title }}</h1>
+    <p>{{ app.job.company.name }} • {{ app.job.location }}</p>
+    <span class="badge badge-{{ app.status }}">{{ app.get_status_display }}</span>
+    <h2 style="margin-top:1rem">Your cover letter</h2><p style="white-space:pre-line">{{ app.cover_letter }}</p>
+    {% if app.interviews.all %}<h2>Interviews</h2>{% for i in app.interviews.all %}<div class="card">{{ i.scheduled_at }} • {{ i.get_type_display }}{% if i.location_or_link %} • {{ i.location_or_link }}{% endif %}{% if i.notes %}<br>{{ i.notes }}{% endif %}</div>{% endfor %}{% endif %}
+    {% if app.candidate == user and app.status != 'hired' and app.status != 'rejected' and app.status != 'withdrawn' %}
+    <form method="post" action="{% url 'applications:withdraw' app.pk %}">{% csrf_token %}<button class="btn btn-ghost" type="submit">Withdraw application</button></form>
+    {% endif %}
+  </div>
+  <div class="card">
+    <h2>Progress</h2>
+    <ul class="timeline">
+      {% for status, label in statuses %}
+        {% if status != 'rejected' and status != 'withdrawn' %}
+        <li><span class="dot {% if status == app.status %}current{% endif %}">
+        </span><div><strong>{{ label }}</strong></div></li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

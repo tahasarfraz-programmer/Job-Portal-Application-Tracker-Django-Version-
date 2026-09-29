@@ -1,0 +1,17 @@
+{% extends "dashboard_base.html" %}
+{% block dash_content %}
+<h1>Application tracker</h1>
+<form method="get" style="margin-bottom:1rem">
+  <select name="status" onchange="this.form.submit()"><option value="">All statuses</option>{% for v,l in statuses %}<option value="{{ v }}" {% if selected == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+</form>
+{% if apps %}
+<div class="card" style="overflow-x:auto">
+<table><thead><tr><th>Job</th><th>Company</th><th>Applied</th><th>Status</th><th>Updated</th><th></th></tr></thead>
+<tbody>{% for a in apps %}<tr>
+  <td>{{ a.job.title }}</td><td>{{ a.job.company.name }}</td><td>{{ a.created_at|date:"M j, Y" }}</td>
+  <td><span class="badge badge-{{ a.status }}">{{ a.get_status_display }}</span></td><td>{{ a.updated_at|date:"M j, Y" }}</td>
+  <td><a href="{% url 'applications:detail' a.pk %}">Details</a></td>
+</tr>{% endfor %}</tbody></table>
+</div>
+{% else %}<div class="card empty"><h3>No applications yet</h3><p>When you apply for a job, it appears here with its live status.</p><a class="btn" href="{% url 'jobs:list' %}">Find jobs</a></div>{% endif %}
+{% endblock %}

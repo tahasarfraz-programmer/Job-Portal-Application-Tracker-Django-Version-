@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width:480px;padding:2rem 1rem">
+  <div class="card">
+    <h1>Create your account</h1>
+    {% if form.non_field_errors %}<ul class="messages">{% for e in form.non_field_errors %}<li class="error">{{ e }}</li>{% endfor %}</ul>{% endif %}
+    <form method="post">{% csrf_token %}
+      {% for field in form %}<label>{{ field.label }}{{ field }}{% for e in field.errors %}<small style="color:#e11d48">{{ e }}</small>{% endfor %}</label>{% endfor %}
+      <button class="btn" style="width:100%" type="submit">Create account</button>
+    </form>
+    <p style="margin-top:1rem">Already registered? <a href="{% url 'accounts:login' %}">Log in</a></p>
+  </div>
+</div>
+{% endblock %}

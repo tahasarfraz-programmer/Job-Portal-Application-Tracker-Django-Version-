@@ -1,0 +1,27 @@
+{% extends "dashboard_base.html" %}
+{% block dash_content %}
+<h1>Employer dashboard</h1>
+<div class="stats-grid">
+  <div class="stat"><div class="n">{{ stats.total_jobs }}</div>Total jobs</div>
+  <div class="stat"><div class="n">{{ stats.active_jobs }}</div>Active jobs</div>
+  <div class="stat"><div class="n">{{ stats.total_applications }}</div>Applications</div>
+  <div class="stat"><div class="n">{{ stats.shortlisted }}</div>Shortlisted</div>
+  <div class="stat"><div class="n">{{ stats.interviews }}</div>Interviews</div>
+  <div class="stat"><div class="n">{{ stats.hired }}</div>Hired</div>
+</div>
+<div style="display:flex;justify-content:space-between;align-items:center;margin:1rem 0">
+  <h2>Your jobs</h2><a class="btn" href="{% url 'dashboard:job_create' %}">Post a job</a>
+</div>
+{% if jobs %}
+<div class="card" style="overflow-x:auto"><table><thead><tr><th>Title</th><th>Status</th><th>Applicants</th><th></th></tr></thead>
+<tbody>{% for j in jobs %}<tr>
+  <td>{{ j.title }}</td><td>{{ j.status }}</td><td>{{ j.applicant_count }}</td>
+  <td style="display:flex;gap:.6rem;flex-wrap:wrap">
+    <a href="{% url 'applications:applicants' j.pk %}">Applicants</a>
+    <a href="{% url 'dashboard:job_edit' j.pk %}">Edit</a>
+    <form method="post" action="{% url 'dashboard:job_toggle' j.pk %}">{% csrf_token %}<button class="btn btn-ghost" type="submit">{% if j.status == 'active' %}Deactivate{% else %}Activate{% endif %}</button></form>
+    <form method="post" action="{% url 'dashboard:job_delete' j.pk %}" onsubmit="return confirm('Delete this job?')">{% csrf_token %}<button class="btn btn-danger" type="submit">Delete</button></form>
+  </td>
+</tr>{% endfor %}</tbody></table></div>
+{% else %}<div class="card empty"><h3>No jobs posted</h3><p>Create your company profile, then post your first role.</p><a class="btn" href="{% url 'companies:mine' %}">Set up company</a></div>{% endif %}
+{% endblock %}

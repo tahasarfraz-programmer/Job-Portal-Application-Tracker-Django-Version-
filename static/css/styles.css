@@ -1,0 +1,55 @@
+:root {
+  --paper: #f5f6f2; --ink: #10243a; --teal: #0e7c6b; --teal-dark: #0a5f52; --amber: #e9a23b; --line: #dfe3dc;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: "Source Sans 3", system-ui, sans-serif; line-height: 1.5; }
+h1, h2, h3 { font-family: "Bricolage Grotesque", system-ui, sans-serif; letter-spacing: -0.02em; margin: 0 0 .4em; }
+a { color: var(--teal); text-decoration: none; }
+a:hover { text-decoration: underline; }
+.container { max-width: 1100px; margin: 0 auto; padding: 0 1rem; }
+.navbar { background: white; border-bottom: 1px solid var(--line); }
+.navbar .container { display: flex; align-items: center; justify-content: space-between; padding-top: .75rem; padding-bottom: .75rem; flex-wrap: wrap; gap: .5rem; }
+.brand { font-family: "Bricolage Grotesque", sans-serif; font-weight: 800; font-size: 1.4rem; color: var(--teal); }
+.nav-links { display: flex; gap: 1rem; align-items: center; font-weight: 600; font-size: .95rem; }
+.btn { display: inline-flex; align-items: center; gap: .4rem; border: none; border-radius: .5rem; padding: .55rem 1rem; font-weight: 600; background: var(--teal); color: white; cursor: pointer; font-size: .95rem; }
+.btn:hover { background: var(--teal-dark); color: white; text-decoration: none; }
+.btn-ghost { background: white; color: var(--ink); border: 1px solid var(--line); }
+.btn-ghost:hover { background: #eef1ec; color: var(--ink); }
+.btn-danger { background: #e11d48; }
+.card { background: white; border: 1px solid var(--line); border-radius: .75rem; padding: 1.25rem; margin-bottom: 1rem; }
+input, select, textarea { width: 100%; border: 1px solid var(--line); border-radius: .5rem; padding: .55rem .7rem; font: inherit; background: white; }
+label { font-weight: 600; font-size: .9rem; display: block; margin-bottom: .9rem; }
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 700px) { .grid-2 { grid-template-columns: 1fr; } }
+.hero { background: var(--ink); color: white; padding: 4rem 0; }
+.hero h1 { font-size: 2.6rem; max-width: 640px; }
+.badge { display: inline-block; border-radius: 999px; padding: .15rem .6rem; font-size: .78rem; font-weight: 700; }
+.badge-applied { background: #e2e8f0; color: #334155; }
+.badge-under-review { background: #dbeafe; color: #075985; }
+.badge-shortlisted { background: #e0e7ff; color: #3730a3; }
+.badge-interview { background: #fef3c7; color: #92400e; }
+.badge-offered { background: #d1fae5; color: #065f46; }
+.badge-hired { background: #0e7c6b; color: white; }
+.badge-rejected { background: #fee2e2; color: #991b1b; }
+.badge-withdrawn { background: #e5e7eb; color: #4b5563; }
+table { width: 100%; border-collapse: collapse; font-size: .92rem; }
+th, td { text-align: left; padding: .6rem; border-bottom: 1px solid var(--line); }
+th { background: var(--paper); }
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: .75rem; margin: 1rem 0; }
+.stat { background: white; border: 1px solid var(--line); border-radius: .75rem; padding: 1rem; }
+.stat .n { font-family: "Bricolage Grotesque", sans-serif; font-size: 2rem; font-weight: 800; }
+.messages { list-style: none; padding: 0; margin: .75rem 0; }
+.messages li { padding: .6rem .9rem; border-radius: .5rem; margin-bottom: .4rem; background: #e0e7ff; }
+.messages .error { background: #fee2e2; }
+.messages .success { background: #d1fae5; }
+.layout { display: grid; grid-template-columns: 15rem 1fr; min-height: 80vh; }
+.sidebar { background: white; border-right: 1px solid var(--line); padding: 1rem; }
+.sidebar a { display: block; padding: .5rem .7rem; border-radius: .5rem; font-weight: 600; color: var(--ink); margin-bottom: .2rem; }
+.sidebar a.active, .sidebar a:hover { background: var(--teal); color: white; text-decoration: none; }
+@media (max-width: 800px) { .layout { grid-template-columns: 1fr; } }
+.empty { text-align: center; padding: 3rem 1rem; }
+.timeline { list-style: none; padding: 0; }
+.timeline li { display: flex; gap: .6rem; margin-bottom: .8rem; }
+.dot { width: .8rem; height: .8rem; border-radius: 999px; background: var(--line); margin-top: .3rem; flex-shrink: 0; }
+.dot.done { background: var(--teal); }
+.dot.current { background: var(--amber); }

@@ -1,0 +1,8 @@
+{% extends "dashboard_base.html" %}
+{% block dash_content %}
+<h1>Saved jobs</h1>
+{% for s in saved %}<div class="card" style="display:flex;justify-content:space-between;align-items:center">
+  <div><a href="{% url 'jobs:detail' s.job.pk %}"><strong>{{ s.job.title }}</strong></a><p>{{ s.job.company.name }} • {{ s.job.location }}</p></div>
+  <form method="post" action="{% url 'jobs:toggle_save' s.job.pk %}">{% csrf_token %}<button class="btn btn-ghost" type="submit">Remove</button></form>
+</div>{% empty %}<div class="card empty"><h3>No saved jobs</h3><p>Save jobs while browsing to compare them later.</p><a class="btn" href="{% url 'jobs:list' %}">Browse jobs</a></div>{% endfor %}
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "dashboard_base.html" %}
+{% block dash_content %}
+<h1>Platform overview</h1>
+<div class="stats-grid">
+  <div class="stat"><div class="n">{{ stats.users }}</div>Users</div>
+  <div class="stat"><div class="n">{{ stats.employers }}</div>Employers</div>
+  <div class="stat"><div class="n">{{ stats.candidates }}</div>Candidates</div>
+  <div class="stat"><div class="n">{{ stats.jobs }}</div>Jobs</div>
+  <div class="stat"><div class="n">{{ stats.active_jobs }}</div>Active jobs</div>
+  <div class="stat"><div class="n">{{ stats.applications }}</div>Applications</div>
+</div>
+<div style="display:flex;gap:.4rem;flex-wrap:wrap;margin:1rem 0">
+  <a class="btn {% if tab == 'users' %}{% else %}btn-ghost{% endif %}" href="?tab=users">Users</a>
+  <a class="btn {% if tab == 'companies' %}{% else %}btn-ghost{% endif %}" href="?tab=companies">Companies</a>
+  <a class="btn {% if tab == 'jobs' %}{% else %}btn-ghost{% endif %}" href="?tab=jobs">Jobs</a>
+  <a class="btn {% if tab == 'applications' %}{% else %}btn-ghost{% endif %}" href="?tab=applications">Applications</a>
+  <a class="btn {% if tab == 'categories' %}{% else %}btn-ghost{% endif %}" href="?tab=categories">Categories</a>
+</div>
+{% if tab == 'categories' %}
+<form method="post" action="{% url 'dashboard:categories' %}" style="display:flex;gap:.5rem;margin-bottom:1rem">{% csrf_token %}<input name="name" placeholder="New category"><button class="btn" type="submit">Add</button></form>
+<div class="card">{% for c in categories %}<p>{{ c.name }}</p>{% endfor %}</div>
+{% else %}
+<div class="card" style="overflow-x:auto">
+{% for row in rows %}
+<div style="display:flex;justify-content:space-between;padding:.5rem 0;border-bottom:1px solid #dfe3dc;flex-wrap:wrap;gap:.5rem">
+  <span>
+    {% if tab == 'users' %}<strong>{{ row.get_full_name|default:row.username }}</strong> • {{ row.email }} • {{ row.role }}
+    {% elif tab == 'companies' %}<strong>{{ row.name }}</strong> • {{ row.industry }}
+    {% elif tab == 'jobs' %}<strong>{{ row.title }}</strong> • {{ row.company.name }} • {{ row.status }}
+    {% else %}<strong>{{ row.candidate }}</strong> → {{ row.job.title }} • {{ row.status }}
+    {% endif %}
+  </span>
+  {% if tab == 'users' and row.role != 'admin' %}
+  <span style="display:flex;gap:.6rem">
+    <form method="post" action="{% url 'dashboard:toggle_user' row.pk %}">{% csrf_token %}<button class="btn btn-ghost" type="submit">{% if row.is_active %}Deactivate{% else %}Activate{% endif %}</button></form>
+    <form method="post" action="{% url 'dashboard:delete_user' row.pk %}" onsubmit="return confirm('Delete this user?')">{% csrf_token %}<button class="btn btn-danger" type="submit">Delete</button></form>
+  </span>
+  {% endif %}
+</div>
+{% empty %}<p>Nothing here yet.</p>{% endfor %}
+</div>
+{% endif %}
+{% endblock %}

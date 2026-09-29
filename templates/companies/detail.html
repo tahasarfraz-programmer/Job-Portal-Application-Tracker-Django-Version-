@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="padding:2rem 1rem">
+  <h1>{{ company.name }}</h1>
+  <p>{{ company.industry }} • {{ company.location }} • {{ company.size }} employees</p>
+  <p>{{ company.description }}</p>
+  <h2 style="margin-top:2rem">Open roles</h2>
+  {% for job in jobs %}<div class="card"><a href="{% url 'jobs:detail' job.pk %}"><strong>{{ job.title }}</strong></a><p>{{ job.location }} • {{ job.employment_type }}</p></div>{% empty %}<p>No open roles right now.</p>{% endfor %}
+</div>
+{% endblock %}

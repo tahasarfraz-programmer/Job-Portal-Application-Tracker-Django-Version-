@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load job_extras %}
+{% block content %}
+<div class="container" style="padding:2rem 1rem;display:grid;grid-template-columns:1fr 20rem;gap:1.5rem">
+  <article class="card">
+    <h1>{{ job.title }}</h1>
+    <p>{{ job.company.name }} • {{ job.location }} • {{ job.work_mode }}</p>
+    <p><strong>{% if job.salary_min or job.salary_max %}${{ job.salary_min }} – ${{ job.salary_max }}{% else %}Salary not listed{% endif %}</strong> • {{ job.employment_type }} • {{ job.experience_level }}</p>
+    <p style="color:#6b7280;font-size:.9rem">Posted {{ job.posted_at|date:"M j, Y" }}{% if job.deadline %} • Apply by {{ job.deadline }}{% endif %}</p>
+    <div style="display:flex;gap:.5rem;flex-wrap:wrap;margin:1rem 0">
+      {% if not user.is_authenticated or user.role == 'seeker' %}
+        {% if already_applied %}<span class="badge badge-applied">Already applied</span>
+        {% else %}<a class="btn" href="{% if user.is_authenticated %}#apply{% else %}{% url 'accounts:login' %}{% endif %}">Apply now</a>{% endif %}
+      {% endif %}
+      {% if user.is_authenticated and user.role == 'seeker' %}
+      <form method="post" action="{% url 'jobs:toggle_save' job.pk %}">{% csrf_token %}<button class="btn btn-ghost" type="submit">{% if is_saved %}Saved{% else %}Save job{% endif %}</button></form>
+      {% endif %}
+    </div>
+    {% if user.is_authenticated and user.role == 'seeker' and not already_applied and job.is_open %}
+    <form id="apply" method="post" action="{% url 'jobs:apply' job.pk %}" style="background:#f5f6f2;border-radius:.5rem;padding:1rem">{% csrf_token %}
+      {% for field in form %}<label>{{ field.label }}{{ field }}</label>{% endfor %}
+      <p style="font-size:.9rem">Your profile resume is attached automatically. <a href="{% url 'accounts:profile' %}">Update resume</a></p>
+      <button class="btn" type="submit">Submit application</button>
+    </form>
+    {% endif %}
+    <h2 style="margin-top:1.5rem">About the role</h2><p style="white-space:pre-line">{{ job.description }}</p>
+    {% if job.responsibilities %}<h2>Responsibilities</h2><ul>{% for r in job.responsibilities|splitlines_clean %}<li>{{ r }}</li>{% endfor %}</ul>{% endif %}
+    {% if job.requirements %}<h2>Requirements</h2><ul>{% for r in job.requirements|splitlines_clean %}<li>{{ r }}</li>{% endfor %}</ul>{% endif %}
+    {% if job.skills %}<h2>Skills</h2><ul>{% for s in job.skills_list %}<li>{{ s }}</li>{% endfor %}</ul>{% endif %}
+    {% if job.benefits %}<h2>Benefits</h2><ul>{% for b in job.benefits|splitlines_clean %}<li>{{ b }}</li>{% endfor %}</ul>{% endif %}
+  </article>
+  <aside>
+    <div class="card"><h2>{{ job.company.name }}</h2><p>{{ job.company.industry }} • {{ job.company.size }} employees</p><p>{{ job.company.description }}</p></div>
+    {% if related %}<h2>Related jobs</h2>{% for r in related %}<div class="card"><a href="{% url 'jobs:detail' r.pk %}">{{ r.title }}</a></div>{% endfor %}{% endif %}
+  </aside>
+</div>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "dashboard_base.html" %}
+{% block dash_content %}
+<h1>Applicants — {{ job.title }}</h1>
+{% for a in apps %}
+<div class="card">
+  <div style="display:flex;justify-content:space-between;align-items:start;flex-wrap:wrap;gap:.5rem">
+    <div><h3>{{ a.candidate.get_full_name|default:a.candidate.username }}</h3><p>{{ a.candidate.title }} • {{ a.candidate.email }}</p></div>
+    <span class="badge badge-{{ a.status }}">{{ a.get_status_display }}</span>
+  </div>
+  <p style="white-space:pre-line">{{ a.cover_letter }}</p>
+  <div style="display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+    <form method="post" action="{% url 'applications:update_status' a.pk %}">{% csrf_token %}
+      <select name="status" onchange="this.form.submit()">{% for v,l in status_form.status.field.choices %}<option value="{{ v }}" {% if a.status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+    </form>
+    {% if a.candidate.resume %}<a class="btn btn-ghost" href="{% url 'accounts:candidate_resume_download' a.candidate.pk %}">View resume</a>{% endif %}
+  </div>
+  <details style="margin-top:.5rem"><summary style="cursor:pointer;font-weight:600">Schedule interview</summary>
+    <form method="post" action="{% url 'applications:schedule_interview' a.pk %}" class="grid-2" style="margin-top:.5rem">{% csrf_token %}
+      {% for field in interview_form %}<label>{{ field.label }}{{ field }}</label>{% endfor %}
+      <button class="btn" type="submit" style="grid-column:1/-1">Save interview</button>
+    </form>
+  </details>
+</div>
+{% empty %}<div class="card empty"><h3>No applicants yet</h3><p>Applications will appear here as candidates apply.</p></div>{% endfor %}
+{% endblock %}

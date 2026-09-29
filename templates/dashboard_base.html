@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="layout">
+  <aside class="sidebar">
+    {% if user.role == 'seeker' %}
+      <a href="{% url 'applications:tracker' %}" class="{% if request.resolver_match.url_name == 'tracker' %}active{% endif %}">Applications</a>
+      <a href="{% url 'jobs:saved' %}">Saved jobs</a>
+      <a href="{% url 'accounts:profile' %}">My profile</a>
+      <a href="{% url 'jobs:list' %}">Browse jobs</a>
+    {% elif user.role == 'employer' %}
+      <a href="{% url 'dashboard:employer' %}">Dashboard</a>
+      <a href="{% url 'dashboard:job_create' %}">Post a job</a>
+      <a href="{% url 'companies:mine' %}">Company</a>
+    {% elif user.role == 'admin' %}
+      <a href="{% url 'dashboard:admin' %}">Overview</a>
+    {% endif %}
+  </aside>
+  <div class="container" style="padding:1.5rem 1rem">
+    {% block dash_content %}{% endblock %}
+  </div>
+</div>
+{% endblock %}

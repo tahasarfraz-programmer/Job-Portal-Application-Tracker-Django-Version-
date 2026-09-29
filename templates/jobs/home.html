@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero"><div class="container">
+  <h1>Apply once. Know where you stand every time.</h1>
+  <p style="max-width:520px;opacity:.8">Hirewell pairs a job board with a live application tracker, so candidates and hiring teams always see the same status.</p>
+  <form method="get" action="{% url 'jobs:list' %}" style="display:flex;gap:.5rem;max-width:480px;margin-top:1.5rem">
+    <input type="text" name="q" placeholder="Job title, skill or company">
+    <button class="btn" style="background:#e9a23b;color:#10243a" type="submit">Search jobs</button>
+  </form>
+</div></div>
+<div class="container" style="padding:2rem 1rem">
+  <h2>Latest openings</h2>
+  {% for job in featured %}
+  <div class="card" style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:.5rem">
+    <div><a href="{% url 'jobs:detail' job.pk %}"><strong>{{ job.title }}</strong></a><p>{{ job.company.name }} • {{ job.location }} • {{ job.work_mode }}</p></div>
+    <a class="btn" href="{% url 'jobs:detail' job.pk %}">View</a>
+  </div>
+  {% empty %}<p>No jobs yet. Run <code>python manage.py seed_data</code> to add demo data.</p>{% endfor %}
+</div>
+{% if categories %}<div class="container" style="padding-bottom:2rem"><h2>Browse by category</h2>
+  {% for c in categories %}<a class="btn btn-ghost" style="margin:0 .4rem .4rem 0" href="{% url 'jobs:list' %}?category={{ c.slug }}">{{ c.name }}</a>{% endfor %}
+</div>{% endif %}
+<div class="container" style="padding-bottom:2rem" >
+  <div class="grid-2">
+    <div class="card"><h3>Looking for your next role?</h3><p>Search, save and apply from one place.</p><a class="btn" href="{% url 'accounts:register' %}">Create a candidate account</a></div>
+    <div class="card"><h3>Hiring?</h3><p>Post roles and move applicants through your pipeline.</p><a class="btn btn-ghost" href="{% url 'accounts:register' %}">Create an employer account</a></div>
+  </div>
+</div>
+{% endblock %}
