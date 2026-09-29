@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Hirewell — Django Implementation
 
 Server-rendered version of the job portal, built with Django, Django ORM and Django REST Framework (used for the read-only `/api/` endpoints).
@@ -70,3 +71,6 @@ Verified with Django's test client: home/list/detail pages, registration, login 
 - Email sending uses Django's console backend (prints to stdout) — swap `EMAIL_BACKEND` for SMTP/SES in production.
 - File uploads are stored on local disk (`media/`); swap `DEFAULT_FILE_STORAGE` for S3-compatible storage in production.
 - No automated test suite (`tests.py` files) is included yet — see the root README's "Future improvements".
+=======
+# Job-Portal-Application-Tracker-Django-Version-
+>>>>>>> 7457e7a4538eb0265684fab6e1eae977078f67ce
